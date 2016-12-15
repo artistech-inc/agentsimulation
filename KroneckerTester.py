@@ -1,12 +1,12 @@
-from InitMatrix import InitMatrix
-import Generator
+from KroneckerInitMatrix import InitMatrix
+import KroneckerGenerator
 import numpy as np
 import networkx as nx
 import testgg as test
 import matplotlib.pyplot as plt
 
 def get_graph(nxgraph):
-    
+
     x = nxgraph
     cc_conn = nx.connected_components(x)
     num_cc = nx.number_connected_components(x)
@@ -43,7 +43,7 @@ nodes = 5
 #p = 15
 #c = 6
 #probArr = np.array([1, c*p, p/c, 0, 0, c*p, 1, p/c, 0, 0, p/c, p/c, 1, p/c, p/c, 0, 0, p/c, 1, c*p, 0, 0, p/c, c*p, 1])
-#init.makeStochasticCustom(probArr) 
+#init.makeStochasticCustom(probArr)
 
 #Networkx Graph Gen as Seed, Alpha Beta after Testing
 #G = nx.watts_strogatz_graph(5, 2, 0.1)
@@ -65,11 +65,11 @@ print "Seed Matrix Nodes:"
 print nodes
 print "Kronecker Iterations:"
 print k
-nxgraph = Generator.generateStochasticKron(init, k, False)
+nxgraph = KroneckerGenerator.generateStochasticKron(init, k, False)
 #for line in nx.generate_edgelist(nxgraph, data=False):
  #   print(line)
 print "Done Creating Network!"
-nx.draw(nxgraph) #pos=nx.random_layout(nxgraph) 
+nx.draw(nxgraph) #pos=nx.random_layout(nxgraph)
 plt.show()
 #print "Creating Histogram..."
 #histogramInput = create_graph_stats(nxgraph)
