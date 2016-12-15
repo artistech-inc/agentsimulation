@@ -1,10 +1,10 @@
 
-import random 
-import Agent 
+import random
+import Agent
 import GraphGen as gg
 import SimulationStats
 import networkx as nx
-from simutil import * 
+from simutil import *
 
 
 ########## Initialization code
@@ -30,22 +30,23 @@ def create_connectivity(agents, p, type='undirected_random'):
                 agent.uses_knowledge = True
     else:
         conn = gg.random_directed_graph(agents, p)
-        
+
     for agent1 in conn.nodes():
         agent1.connect_to(conn.neighbors(agent1))
-    
+
     if type in ['hierarchy', 'collaborative']:
         return (1, len(agents))
     else:
         cc_conn = nx.connected_components(conn)
-        ## return the number of connected components and 
+        ## return the number of connected components and
         ## the size of the largest connected component
-        return (len(cc_conn), len(cc_conn[0]))
+        cc_max = [len(c) for c in sorted(cc_conn, key=len, reverse=True)]
+        return (len(cc_max), cc_max[0])
 
 def change_agent_property(agents, setup):
     """
     Setup is a dictionary that has new values and a ratio.
-    It changes a proportion of agents given by the ratio to the 
+    It changes a proportion of agents given by the ratio to the
     given values for the given properties.
 
     """
@@ -91,7 +92,7 @@ def multi_step_simulation(NUM_FACTS, NUM_NOISE, NUM_AGENTS, \
                           SPAMMINESS=0, SELFISHNESS=0, \
                           TRUST_USED=True, INBOX_TRUST_SORTED=False, \
                           TRUST_FILTER_ON=True):
-    
+
     facts = range(NUM_FACTS + NUM_NOISE)
     ##print "Created", len(facts), "facts"
 
@@ -103,7 +104,7 @@ def multi_step_simulation(NUM_FACTS, NUM_NOISE, NUM_AGENTS, \
                                     TRUST_USED, INBOX_TRUST_SORTED, \
                                     TRUST_FILTER_ON) )
 
-    ## Now, change the properties of some agents 
+    ## Now, change the properties of some agents
     ## based on the agent setup data
     for setup in AGENT_SETUP: ## each setup is a dictionary
         change_agent_property(agents, setup)
@@ -119,8 +120,8 @@ def multi_step_simulation(NUM_FACTS, NUM_NOISE, NUM_AGENTS, \
             ## find a random agent, and distribute fact i
             k = random.randint(0,NUM_AGENTS-1)
             agents[k].add_fact(i)
-            
-    ## Initialize agents to send everything that they think is valuable 
+
+    ## Initialize agents to send everything that they think is valuable
     ## in their outbox
     for agent in agents:
         agent.init_outbox()
@@ -203,7 +204,7 @@ def run_simulation(NUM_FACTS, NUM_NOISE, NUM_AGENTS, \
     results['steps'] = all_stats.steps
 
     return (results)
-    
+
 ########## Main body
 
 if __name__ == '__main__':
@@ -221,7 +222,7 @@ if __name__ == '__main__':
     GRAPH_TYPE = 'spatial_random'
 
     NUM_TRIAL = 1
-    ## number of times to repeat the simulation for averaging out values 
+    ## number of times to repeat the simulation for averaging out values
 
     # for i in xrange(5):
     #     w = 0.2 + 0.2*i
@@ -240,7 +241,7 @@ if __name__ == '__main__':
                                          AGENT_SETUP=[{ "ratio" : 0.2,\
                                                             "spammer" : 0.8, \
                                                             "competence":0.2 }])
-            
+
             ##print results
             print 'w, c, num_cc, size_lcc'
             print w, c, results['num_cc'], results['size_lcc']
