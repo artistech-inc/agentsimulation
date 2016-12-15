@@ -39,10 +39,11 @@ def get_graph(objects, properties):
         tries += 1
         x = x.to_undirected()
         cc_conn = nx.connected_components(x)
-        if len(cc_conn) == 1 or tries > 5: 
+        cc_max = [len(c) for c in sorted(cc_conn, key=len, reverse=True)]
+        if len(cc_max) == 1 or tries > 5:
             ##best effort to create a connected graph!
             break
-    return x, cc_conn
+    return x, cc_max
 
 def create_graph_type(objects, properties):
     (x, cc_conn) = get_graph(objects, properties)
@@ -51,7 +52,7 @@ def create_graph_type(objects, properties):
     deg = nx.degree_centrality(x)
 
     stats = {'cc':cc, 'bc':bc, 'deg':deg, \
-             'num_cc':len(cc_conn), 'largest_cc':len(cc_conn[0])}
+             'num_cc':len(cc_conn), 'largest_cc':cc_conn[0]}
 
     conn = nx.Graph()
     for (i,j) in x.edges():
@@ -113,23 +114,23 @@ def collaborative_graph(objects):
             object2 = random.choice(objects[5:])
         conn.add_edge(object1,object2)
         conn.add_edge(object2,object1)
-                 
+
     ##Add collaboration between middle row.
     for object1 in objects[1:5]:
         for object2 in objects[1:5]:
             if object1 != object2:
                 conn.add_edge(object1,object2)
                 conn.add_edge(object2,object1)
-                 
+
     ##Link middle layer to root
     for object in objects[1:5]:
         conn.node[object]['rank'] = 1
         conn.add_edge(object,objects[0])
     conn.node[objects[0]]['rank'] = 0
-            
+
     return conn
 
-#Create a fulll, five layer bitree. 
+#Create a fulll, five layer bitree.
 #This can be adjusted later to be an arbitrary number of layers and arbitrary number of children
 def hierarchy_graph(objects):
     conn = nx.DiGraph()
@@ -141,7 +142,6 @@ def hierarchy_graph(objects):
        curr_layer = pow(2,layer)-1
        for employee in range(curr_layer+1): #Number of agents in a layer is one more than the ID of the first agent in the layer
           conn.add_edge(employee+curr_layer, employee/2 + prev_layer)
-       
-    
-    return conn
 
+
+    return conn

@@ -36,19 +36,21 @@ def get_graph(objects, properties):
             x = nx.star_graph(len(objects)-1)
         tries += 1
         cc_conn = nx.connected_components(x)
-        if len(cc_conn) == 1 or tries > 5: 
+        cc_max = [len(c) for c in sorted(cc_conn, key=len, reverse=True)]
+        if len(cc_max) == 1 or tries > 5:
             ##best effort to create a connected graph!
             break
-    return x, cc_conn
+    return x, cc_max
 
 def create_graph_type(objects, properties):
     (x, cc_conn) = get_graph(objects, properties)
     cc = nx.closeness_centrality(x)
     bc = nx.betweenness_centrality(x)
     deg = nx.degree_centrality(x)
+    print cc_conn
 
     stats = {'cc':cc, 'bc':bc, 'deg':deg, \
-             'num_cc':len(cc_conn), 'largest_cc':len(cc_conn[0])}
+             'num_cc':len(cc_conn), 'largest_cc':cc_conn[0]}
 
     conn = nx.Graph()
     for (i,j) in x.edges():
@@ -110,20 +112,20 @@ def collaborative_graph(objects):
             object2 = random.choice(objects[5:])
         conn.add_edge(object1,object2)
         conn.add_edge(object2,object1)
-                 
+
     ##Add collaboration between middle row.
     for object1 in objects[1:5]:
         for object2 in objects[1:5]:
             if object1 != object2:
                 conn.add_edge(object1,object2)
                 conn.add_edge(object2,object1)
-                 
+
     ##Link middle layer to root
     for object in objects[1:5]:
         conn.node[object]['rank'] = 1
         conn.add_edge(object,objects[0])
     conn.node[objects[0]]['rank'] = 0
-            
+
     return conn
 
 def hierarchy_graph(objects):
@@ -142,4 +144,3 @@ def hierarchy_graph(objects):
     conn.node[objects[0]]['rank'] = 0
 
     return conn
-
