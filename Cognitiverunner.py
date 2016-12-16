@@ -1,5 +1,5 @@
 """
-    The runner requires an input configuration file 
+    The runner requires an input configuration file
     --see template for an example, and an output file for the results.
     Example:   python runner.py config_file output_file
 """
@@ -19,7 +19,7 @@ def output(output_loc, is_slave, identity, text):
         sock.sendall('{0:0>8}'.format(str(len(text))))
         sock.sendall(text)
         sock.close()
-        
+
     else:
         f = open(output_loc,"a")
         f.write (text)
@@ -68,7 +68,7 @@ def run(config_file, output_loc, is_slave, identity):
                                                        for d in config ['decisiveness']:
                                                            for cap in config ['capacity']:
                                                               for corroboration_threshold in config['corroboration_threshold']:
-             
+
                                                                  print "Case", i, "being executed"
                                                                  print "running for %d/%d facts per group %d groups %d agents"\
                                                                      %(num_fpro+num_fcon, num_npro+num_ncon, num_groups, num_agents)
@@ -90,7 +90,11 @@ def run(config_file, output_loc, is_slave, identity):
                                                                                               radius, \
                                                                                               num_steps, \
                                                                                               w, c, e, d, \
+                                                                                              # CM  # Missing!
                                                                                               corroboration_threshold, \
+                                                                                              # DISC_W_AMBIG  # Missing!
+                                                                                              # DISP  # Missing!
+                                                                                              # OUT_CAPACITY  # Missing!
                                                                                               cap, \
                                                                                               num_trials, \
                                                                                               graph_type,\

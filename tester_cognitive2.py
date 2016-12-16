@@ -1,5 +1,5 @@
 ## good test cases for engagement versus decisiveness
-## when there is a lot of noise, actually high engagement reduces the network performance 
+## when there is a lot of noise, actually high engagement reduces the network performance
 ## by multiplying the noise in the network instead of network filtering out noise slowly
 ## in problem cases with high con noise, other cases or when competence is high, engagement
 ## is good
@@ -8,7 +8,7 @@
 ## at least I think so
 
 import Cognitivesimulation as sim
-import json 
+import json
 import sys
 import time
 import simplejson as sj
@@ -43,9 +43,9 @@ params = {'competence' : [0.5,0.7,0.9],
 #          'engagement' : [0.2,0.5,0.8],
 #          'decisiveness' : [0.7, 0.8, 0.9],
 #          'closedmindedness' : [0.0,0.5,1.0],
-#          'corroboration_threshold' : [1,2,3], 
+#          'corroboration_threshold' : [1,2,3],
          }
-         
+
 if len(sys.argv) > 1:
     fname = sys.argv[1]
 
@@ -69,7 +69,9 @@ for param in params.keys():
                                              num_steps, \
                                              w, c, e, decisiveness, cm, \
                                              corroboration_threshold, \
+                                             # DISC_W_AMBIG  # Missing!
                                              disp, \
+                                             # OUT_CAPACITY  # Missing!
                                              cap, \
                                              num_trials, \
                                              graph_type,\
@@ -80,8 +82,6 @@ for param in params.keys():
                                              trust_filter_on)
 
                 f.write(sj.dumps(results) + "\n")
-
-                
 
                 infostr = "comp: %.2f, e: %.2f, good: %d/%d, bad: %d/%d, "\
                           "maxsa: %.2f, decisiveness: %.2f, agf: %d, cf: %d, capacity: %d" \
@@ -100,4 +100,3 @@ for param in params.keys():
                        (i > 0 and results['decisions'][i-1] == results['decisions'][i]):
                         break
                 print infostr
-

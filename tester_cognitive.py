@@ -8,7 +8,7 @@
 
 
 import Cognitivesimulation as sim
-import json 
+import json
 import sys
 import time
 import simplejson as sj
@@ -54,7 +54,9 @@ for decisiveness in [0.2, 0.5, 0.8]:
                                              radius, \
                                              num_steps, \
                                              w, c, e, decisiveness, \
+                                             # CM # Missing!
                                              corraboration_threshold, \
+                                             # DISC_W_AMBIG, DISP, OUT_CAPACITY,  # Missing!
                                              cap, \
                                              num_trials, \
                                              graph_type,\
@@ -85,5 +87,3 @@ for decisiveness in [0.2, 0.5, 0.8]:
                         break
                 print infostr
                 print
-
-
